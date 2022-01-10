@@ -1,0 +1,40 @@
+https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjymJ-Ryc7zAhVqSPEDHYcEB5kQFnoECAoQAQ&url=https%3A%2F%2Fgithub.com%2Fedgeos%2Fmeta-greengrass&usg=AOvVaw0m6fwLtFpqrzuYaHlI5YvZ
+https://github.com/edgeos/meta-greengrass
+https://lancesimms.com/RaspberryPi/HackingRaspberryPi4WithYocto_Part1.html
+https://www.balena.io/etcher/
+https://www.linkedin.com/pulse/building-custom-linux-os-raspberrypi-using-buildroot-aswin-venu/
+
+
+#create a directory in the home directory and mount the sdcard to be able to view it's content
+mkdir memory_card
+mount  /dev/mmcblk0p1 ~/memory_card
+sou
+'''
+#Find the sd image
+ls Yocto/build/tmp/deploy/images/<board/image/directory>/*sdimg
+
+
+# This is used to copy the image from the ec2 instance to local directory
+scp -i <path/to/certificate/on/local/device> <address/of/ec2>:Yocto/build/tmp/deploy/images/raspberrypi3-64/rpilinux-image-raspberrypi3-64-20211023091351.rootfs.rpi-sdimg ./
+
+copy image to memory card
+sudo dd if=./<sd/image/filename> of=/dev/mmcblk0 bs=4M status=progress
+
+'''
+
+
+'''
+mount -t vfat /dev/mmcblk0p1 ~/memory_card
+Ajah Judges8:06 PM
+IMAGE_FSTYPES = "tar.xz ext3"
+Ajah Judges8:50 PM
+kernel=kernel-rpi.img
+kernel=kernel8.img
+Ajah Judges8:52 PM
+device_tree=bcm2710-rpi-3-b.dtb
+Ajah Judges9:05 PM
+mount -o remount,rw /
+Ajah Judges9:07 PM
+sudo mount -o remount /dev/mmcblk0p1 ~/memory_card
+sudo mount -o remount,rw /dev/mmcblk0p1 ~/memory_card
+'''

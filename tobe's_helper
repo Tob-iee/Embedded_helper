@@ -1,0 +1,17 @@
+
+* UART
+
+//CABLE COLOUR LABEL
+
+- Green: RX(reciever)
+- White: TX(transmitter)
+- Black: GND(Ground)
+- Red: VCC(not_connected)
+
+#link to see the pin configuration(laballing) on the raspberry pi
+https://pinout.xyz/pinout/uart
+
+#Now connect the uart cable and find uart port location
+ls /dev/tty
+
+ls /dev/tty<usb/port/location> 115200 -fn
