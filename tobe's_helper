@@ -10,6 +10,8 @@
 
 #link to see the pin configuration(laballing) on the raspberry pi
 https://pinout.xyz/pinout/uart
+https://www.jeffgeerling.com/blog/2021/attaching-raspberry-pis-serial-console-uart-debugging
+https://medium.com/@sarala.saraswati/connecting-to-your-raspberry-pi-console-via-the-serial-cable-44d7df95f03e
 
 #Now connect the uart cable and find uart port location
 ls /dev/tty

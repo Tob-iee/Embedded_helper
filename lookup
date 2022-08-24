@@ -3,28 +3,58 @@ https://github.com/edgeos/meta-greengrass
 https://lancesimms.com/RaspberryPi/HackingRaspberryPi4WithYocto_Part1.html
 https://www.balena.io/etcher/
 https://www.linkedin.com/pulse/building-custom-linux-os-raspberrypi-using-buildroot-aswin-venu/
+https://raspberrytips.com/raspberry-pi-commands/
 
+
+'''
+# Find the sd image
+ cd ~/Yocto/build/tmp/deploy/images/raspberrypi3-64
+ # to get the "/<board/image/directory>/*sdimg" paths
+ ls *sdimg 
+
+***rpilinux-image-raspberrypi3-64-20220530163031.rootfs.rpi-sdimg
+rpilinux-image-raspberrypi3-64.rpi-sdimg***
+
+
+# This is used to copy the image/files from the ec2 instance to local directory
+cd ~/
+mkdir sd-card-image
+
+scp -i <path/to/certificate/on/local/device> <user>@<address/of/ec2>:<path to file on remote server> ./
+
+'''
+#copy the  file rpilinux-image-raspberrypi3-64-20220530163031.rootfs.rpi-sdimg
+scp -i /home/nwoke/.ssh/dell_latitude.pem ubuntu@3.80.36.50:~/Yocto/build/tmp/deploy/images/raspberrypi3-64/rpilinux-image-raspberrypi3-64-20220530163031.rootfs.rpi-sdimg /home/nwoke/sd-card-image
+
+#copy the raspberrypi3-64/rpilinux-image-raspberrypi3-64.rpi-sdimg file
+scp -i /home/nwoke/.ssh/dell_latitude.pem ubuntu@34.224.218.113:~/Yocto/build/tmp/deploy/images/raspberrypi3-64/rpilinux-image-raspberrypi3-64.rpi-sdimg /home/nwoke/sd-card-image
+
+#copy the whole yocto folder
+scp -i /home/nwoke/.ssh/dell_latitude.pem ubuntu@34.224.218.113:~/Yocto/ ./
+
+'''
+ls /dev/mmcblk0*
+
+#format sdcard
+#copy image to memory card
+sudo dd if=./<sd/image/filename> of=/dev/mmcblk0 bs=4M status=progress
+
+sudo dd if=/home/nwoke/sd-card-image/rpilinux-image-raspberrypi3-64-20220530163031.rootfs.rpi-sdimg of=/dev/mmcblk0 bs=4M status=progress
+
+'''
+* resource to help with the boot and partitions
+https://raspberrypi.stackexchange.com/questions/108157/copy-os-image-onto-sd-card-partition
+
+'''
+
+mount --types vfat /dev/mmcblk0p1 ~/memory_card or 
+mount  /dev/mmcblk0p1 ~/memory_card 
+cp <sd-image-path> to ~/memory_card
+view the <memory_card folder>
 
 #create a directory in the home directory and mount the sdcard to be able to view it's content
 mkdir memory_card
-mount  /dev/mmcblk0p1 ~/memory_card
-sou
-'''
-#Find the sd image
-ls Yocto/build/tmp/deploy/images/<board/image/directory>/*sdimg
-
-
-# This is used to copy the image from the ec2 instance to local directory
-scp -i <path/to/certificate/on/local/device> <address/of/ec2>:Yocto/build/tmp/deploy/images/raspberrypi3-64/rpilinux-image-raspberrypi3-64-20211023091351.rootfs.rpi-sdimg ./
-
-copy image to memory card
-sudo dd if=./<sd/image/filename> of=/dev/mmcblk0 bs=4M status=progress
-
-'''
-
-
-'''
-mount -t vfat /dev/mmcblk0p1 ~/memory_card
+mount --types vfat /dev/mmcblk0p1 ~/memory_card
 Ajah Judges8:06 PM
 IMAGE_FSTYPES = "tar.xz ext3"
 Ajah Judges8:50 PM
@@ -38,3 +68,10 @@ Ajah Judges9:07 PM
 sudo mount -o remount /dev/mmcblk0p1 ~/memory_card
 sudo mount -o remount,rw /dev/mmcblk0p1 ~/memory_card
 '''
+
+
+
+Duplicate data (dd) from input file (if) of /dev/zero (virtual limitless supply of 0's) into output file (of) of /dev/null (virtual sinkhole) using blocks of 500M size (bs = block size) and repeat this (count) just once (1).
+
+RISC architecture - ARM is Advanced Risc Machine
+we use x86_x64 but we are compiling for ARM, it is called cross-compilation

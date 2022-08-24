@@ -1,0 +1,80 @@
+If the card you have inserted has some partitions, they will be mounted automatically. To avoid any surprises like damaging the card, unmount these partitions. If you are using an SD card reader, the device for the card will be /dev/mmcblk*. If you are using some USB card reader, then the device will be something like /dev/sdX, where X is a number. X depends on the SCSI drives that are already connected to your system. We are using the first option, that is, a built-in SD card reader. You can determine which device is created for your card by issuing the dmesg command as follows:
+
+
+$  dmesg | tail
+
+
+You can also use fdisk -l to check what device is created for your card. Now, you can use the fdisk utility as root or with sudo to create our required partitions, using the following steps:
+
+# Unmount any mounted partition, using the umount command:
+
+$  umount /dev/mmcblk0p1
+
+# Launch the fdisk utitility and delete the previous partition(s); in our case, it is just one:
+
+$  sudo fdisk /dev/mmcblk0
+//Command (m for help): d
+  Selected partition 1
+
+# Create new partition called BOOT of 32 MB and type primary:
+
+//Command (m for help): n
+ Partition type:
+    p   primary (0 primary, 0 extended, 4 free)
+    e   extended
+ Select (default p): 
+ Using default response p
+ Partition number (1-4, default 1): 
+ Using default value 1
+ First sector (2048-7774207, default 2048): 
+ Using default value 2048
+ Last sector, +sectors or +size{K,M,G} (2048-7774207, default 7774207): +32M
+
+# Create a second partition to hold rootfs. We will give all the remaining space to this partition:
+
+//Command (m for help): n
+ Partition type:
+    p   primary (1 primary, 0 extended, 3 free)
+    e   extended
+ Select (default p): 
+ Using default response p
+ Partition number (1-4, default 2): 
+ Using default value 2
+ First sector (67584-7774207, default 67584):  
+ Using default value 67584
+ Last sector, +sectors or +size{K,M,G} (67584-7774207, default 7774207): 
+ Using default value 7774207
+
+# Make the first partition bootable by setting the boot flag:
+
+//Command (m for help): a
+ Partition number (1-4): 1
+
+# Set the first partition as WIN95 FAT32 (LBA):
+
+//Command (m for help): t 
+ Selected partition 1 
+ Hex code (type L to list codes): c
+
+# We are done with the filesystem modification. So, let's write it by issuing the w command:
+
+//Command (m for help): w
+ The partition table has been altered!
+ Calling ioctl() to re-read partition table.
+ Syncing disks.
+
+  ```Do not forget to set the first partition as WIN95 FAT32 (LBA); otherwise, BeagleBone won't be able to boot from it. In this case, you might end up wasting time figuring out what's going wrong.```
+
+# Format the first partition as FAT, using the following command. We will set the label as BOOT so that we know what directory it will be mounted to by udisks:'
+
+$  sudo mkfs.vfat -n "BOOT" /dev/mmcblk0p1
+
+
+# Format the second partition as an ext4 filesystem, using the following command. The label for this is set to ROOT, as it will contain the extracted image of rootfs.
+
+
+$  sudo mkfs.ext4 -L "ROOT" /dev/mmcblk0p2
+
+
+After this remove the sdcard and re-insert it. If the sdcard does not show up or reflect on the file system GUI, try formating the sdcard partitions individually using the disk app on ubuntu then remove the sdcard and re-insert again, you should be able to see it now.
+

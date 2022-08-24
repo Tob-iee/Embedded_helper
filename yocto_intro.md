@@ -29,7 +29,7 @@ $ git clone -b zeus http://git.yoctoproject.org/git/poky
 $ source poky/oe-init-build-env build
 
 ## Download meta-raspberry pi layer
-$ cd ~/Yocto 
+$ cd ~/Yocto or cd ..
 $ git clone -b zeus git://git.yoctoproject.org/meta-raspberrypi
 
 ## Modify build configuration files (i.e.bblayers.conf and local.conf)
@@ -78,7 +78,7 @@ $ cd ~/Yocto
 $ mkdir meta-rpilinux 
 $ cd meta-rpilinux 
 $ mkdir conf 
-$ cd conf & vi layer.conf
+$ cd conf && vi layer.conf
 
 ```
 # We have a conf and classes directory, add to BBPATH
@@ -97,7 +97,6 @@ LAYERSERIES_COMPAT_rpilinux = "zeus dunfell"
 
 ## Create our embedded recipe
 $ cd ~/Yocto/meta-rpilinux 
-lsour
 $ mkdir recipes-rpilinux 
 $ cd recipes-rpilinux 
 $ mkdir images 
@@ -113,5 +112,11 @@ IMAGE_INSTALL += "openssh openssl openssh-sftp-server"
 ```
 
 ## PARTY TIME 
-$ cd ~/Yocto
+$ cd ~/Yocto/build
 $ bitbake rpilinux-image
+
+# looks at this site for image review
+https://gachiemchiep.github.io/cheatsheet/build_image_rpi3_yocto/
+https://kickstartembedded.com/2021/12/22/yocto-part-4-building-a-basic-image-for-raspberry-pi/
+https://kickstartembedded.com/2022/01/21/yocto-part-6-understanding-and-creating-your-first-custom-recipe/
+https://www.yoctoproject.org/docs/1.8/bsp-guide/bsp-guide.html
